@@ -4,6 +4,10 @@ package com.red_badger.Martian.Robots.controller;
 import com.red_badger.Martian.Robots.model.Position;
 import com.red_badger.Martian.Robots.model.RobotInput;
 import com.red_badger.Martian.Robots.service.RobotService;
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.*;
+import io.swagger.v3.oas.annotations.responses.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,6 +20,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 @RequiredArgsConstructor
+@OpenAPIDefinition(
+        info = @Info(title = "Martian Robots API", version = "1.0", description = "Control robots on Mars")
+)
 public class RobotController {
 
     private final RobotService robotService;
@@ -44,6 +51,11 @@ public class RobotController {
         return "index";
     }
 
+    @Operation(summary = "Process robot instructions via API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Position.class)))),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     @GetMapping("/api/process")
     @ResponseBody
     public List<Position> apiProcess(@Valid RobotInput input) {

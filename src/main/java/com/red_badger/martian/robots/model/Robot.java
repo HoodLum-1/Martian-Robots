@@ -1,7 +1,11 @@
-package com.red_badger.Martian.Robots.model;
+package com.red_badger.martian.robots.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.ToString;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "robots", indexes = {

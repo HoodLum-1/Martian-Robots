@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Martian-Robots
+    name: 
 
   thymeleaf:
     cache: false
@@ -10,7 +10,7 @@ spring:
     encoding: UTF-8
 
   datasource:
-    url: jdbc:h2:mem:Martian_Robots
+    url: jdbc:h2:mem:martian_robots
     driverClassName: org.h2.Driver
     username: sa
     password:

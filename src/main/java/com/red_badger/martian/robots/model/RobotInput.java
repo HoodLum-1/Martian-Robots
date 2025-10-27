@@ -1,4 +1,4 @@
-package com.red_badger.Martian.Robots.model;
+package com.red_badger.martian.robots.model;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

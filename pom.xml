@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.red_badger</groupId>
-	<artifactId>Martian-Robots</artifactId>
+	<artifactId>martian-robots</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Martian-Robots</name>
+	<name>martian-robots</name>
 	<description>Martian Robots Challenge - Spring Boot Application</description>
 	<url/>
 	<licenses>

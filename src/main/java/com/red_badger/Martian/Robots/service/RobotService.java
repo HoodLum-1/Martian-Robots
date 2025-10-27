@@ -14,43 +14,47 @@ import java.util.List;
 public class RobotService {
 
     public List<Position> processMultipleRobots(RobotInput input) {
-        log.info("Processing robot: {}", input);
         var grid = new Grid(input.gridMaxX(), input.gridMaxY());
         var start = new Position(input.startX(), input.startY(), Orientation.valueOf(input.startOrientation()));
         var result = processRobotInstructions(grid, start, input.instructions());
         return List.of(result);
     }
 
-    private Position processRobotInstructions(Grid grid, Position pos, String instructions) {
-        var current = pos;
+    public Position processRobotInstructions(Grid grid, Position start, String instructions) {
+        Position current = start;
+
         for (char cmd : instructions.toCharArray()) {
-            var next = switch (cmd) {
-                case 'L' -> current.withOrientation(current.orientation().turnLeft());
-                case 'R' -> current.withOrientation(current.orientation().turnRight());
+            Position next = switch (cmd) {
+                case 'L' -> new Position(current.x(), current.y(), current.orientation().turnLeft(), current.lost());
+                case 'R' -> new Position(current.x(), current.y(), current.orientation().turnRight(), current.lost());
                 case 'F' -> moveForward(current);
                 default -> current;
             };
 
             if (!grid.isWithinBounds(next.x(), next.y())) {
-                if (!grid.hasScent(current.x(), current.y())) {
-                    grid = grid.addScent(current.x(), current.y());
-                    current = current.withLost(true);
-                    break;
+                if (grid.hasScent(current.x(), current.y(), current.orientation())) {
+                    continue;
+                } else {
+                    grid.addScent(current.x(), current.y(), current.orientation());
+                    Position lost = new Position(current.x(), current.y(), current.orientation(), true);
+                    log.info("Final position: {}", lost.toOutputString());
+                    return lost;
                 }
-            } else {
-                current = next;
             }
+
+            current = next;
         }
+
         log.info("Final position: {}", current.toOutputString());
         return current;
     }
 
     private Position moveForward(Position p) {
         return switch (p.orientation()) {
-            case N -> p.withY(p.y() + 1);
-            case S -> p.withY(p.y() - 1);
-            case E -> p.withX(p.x() + 1);
-            case W -> p.withX(p.x() - 1);
+            case N -> new Position(p.x(), p.y() + 1, p.orientation(), p.lost());
+            case S -> new Position(p.x(), p.y() - 1, p.orientation(), p.lost());
+            case E -> new Position(p.x() + 1, p.y(), p.orientation(), p.lost());
+            case W -> new Position(p.x() - 1, p.y(), p.orientation(), p.lost());
         };
     }
 }

@@ -1,4 +1,4 @@
-package com.red_badger.Martian.Robots;
+package com.red_badger.martian.robots;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

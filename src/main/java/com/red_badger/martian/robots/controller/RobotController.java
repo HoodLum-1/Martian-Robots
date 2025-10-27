@@ -1,9 +1,9 @@
-package com.red_badger.Martian.Robots.controller;
+package com.red_badger.martian.robots.controller;
 
 
-import com.red_badger.Martian.Robots.model.Position;
-import com.red_badger.Martian.Robots.model.RobotInput;
-import com.red_badger.Martian.Robots.service.RobotService;
+import com.red_badger.martian.robots.model.Position;
+import com.red_badger.martian.robots.model.RobotInput;
+import com.red_badger.martian.robots.service.RobotService;
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.*;

@@ -157,16 +157,16 @@
             </div>
 
             <!-- Sample Inputs -->
-            <div class="card">
-                <h3 style="margin-top: 0;">Sample Inputs</h3>
-                <p style="color: #666; margin-bottom: 1rem;">Click to load sample configuration</p>
-
-                <div th:each="sample, iter : ${sampleInputs}">
-                    <div class="card sample-card" onclick="loadSample([[${iter.index}]])"
-                         style="margin-bottom: 1rem; padding: 1rem;">
-                        <div style="font-weight: 500;">Grid: [[${sample.gridMaxX}]]x[[${sample.gridMaxY}]] |
-                            Start: ([[${sample.startX}]], [[${sample.startY}]]) [[${sample.startOrientation}]]</div>
-                        <div style="font-family: monospace; margin-top: 0.5rem;">Instructions: [[${sample.instructions}]]</div>
+            <div th:each="sample, iter : ${sampleInputs}">
+                <div class="card sample-card"
+                     th:onclick="'loadSample(' + ${iter.index} + ')'"
+                     style="margin-bottom:1rem;padding:1rem;cursor:pointer;">
+                    <div style="font-weight:500;">
+                        Grid: [[${sample.gridMaxX}]]x[[${sample.gridMaxY}]] |
+                        Start: ([[${sample.startX}]], [[${sample.startY}]]) [[${sample.startOrientation}]]
+                    </div>
+                    <div style="font-family:monospace;margin-top:0.5rem;">
+                        Instructions: [[${sample.instructions}]]
                     </div>
                 </div>
             </div>
@@ -233,21 +233,17 @@
 </div>
 
 <!-- JavaScript for sample loading -->
-<script>
-    const samples = [
-        { gridMaxX: 5, gridMaxY: 3, startX: 1, startY: 1, startOrientation: 'E', instructions: 'RFRFRFRF' },
-        { gridMaxX: 5, gridMaxY: 3, startX: 3, startY: 2, startOrientation: 'N', instructions: 'FRRFLLFFRRFLL' },
-        { gridMaxX: 5, gridMaxY: 3, startX: 0, startY: 3, startOrientation: 'W', instructions: 'LLFFFLFLFL' }
-    ];
+<script th:inline="javascript">
+    const samples = /*[[${sampleInputs}]]*/ [];
 
     function loadSample(index) {
-        const sample = samples[index];
-        document.querySelector('input[th\\:field="*{gridMaxX}"]').value = sample.gridMaxX;
-        document.querySelector('input[th\\:field="*{gridMaxY}"]').value = sample.gridMaxY;
-        document.querySelector('input[th\\:field="*{startX}"]').value = sample.startX;
-        document.querySelector('input[th\\:field="*{startY}"]').value = sample.startY;
-        document.querySelector('select[th\\:field="*{startOrientation}"]').value = sample.startOrientation;
-        document.querySelector('input[th\\:field="*{instructions}"]').value = sample.instructions;
+        const s = samples[index];
+        document.getElementById('gridMaxX').value          = s.gridMaxX;
+        document.getElementById('gridMaxY').value          = s.gridMaxY;
+        document.getElementById('startX').value            = s.startX;
+        document.getElementById('startY').value            = s.startY;
+        document.getElementById('startOrientation').value = s.startOrientation;
+        document.getElementById('instructions').value      = s.instructions;
     }
 
     // Load first sample by default

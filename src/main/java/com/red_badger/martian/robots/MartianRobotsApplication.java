@@ -1,4 +1,4 @@
-package com.red_badger.Martian.Robots;
+package com.red_badger.martian.robots;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

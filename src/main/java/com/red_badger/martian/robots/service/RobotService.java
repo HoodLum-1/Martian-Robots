@@ -1,9 +1,12 @@
-package com.red_badger.Martian.Robots.service;
+package com.red_badger.martian.robots.service;
 
-import com.red_badger.Martian.Robots.model.Grid;
-import com.red_badger.Martian.Robots.model.Orientation;
-import com.red_badger.Martian.Robots.model.Position;
-import com.red_badger.Martian.Robots.model.RobotInput;
+import com.red_badger.martian.robots.model.Grid;
+import com.red_badger.martian.robots.model.Orientation;
+import com.red_badger.martian.robots.model.Position;
+import com.red_badger.martian.robots.model.Robot;
+import com.red_badger.martian.robots.model.RobotInput;
+import com.red_badger.martian.robots.repository.RobotRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +14,19 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class RobotService {
+
+    private final RobotRepository robotRepository;
 
     public List<Position> processMultipleRobots(RobotInput input) {
         var grid = new Grid(input.gridMaxX(), input.gridMaxY());
         var start = new Position(input.startX(), input.startY(), Orientation.valueOf(input.startOrientation()));
         var result = processRobotInstructions(grid, start, input.instructions());
+
+        Robot robot = new Robot(null, result.withLost(result.lost()), input.instructions());
+        robotRepository.save(robot);
+
         return List.of(result);
     }
 

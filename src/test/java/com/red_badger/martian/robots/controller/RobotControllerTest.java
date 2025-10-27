@@ -1,9 +1,9 @@
-package com.red_badger.Martian.Robots.controller;
+package com.red_badger.martian.robots.controller;
 
-import com.red_badger.Martian.Robots.model.Orientation;
-import com.red_badger.Martian.Robots.model.Position;
-import com.red_badger.Martian.Robots.model.RobotInput;
-import com.red_badger.Martian.Robots.service.RobotService;
+import com.red_badger.martian.robots.model.Orientation;
+import com.red_badger.martian.robots.model.Position;
+import com.red_badger.martian.robots.model.RobotInput;
+import com.red_badger.martian.robots.service.RobotService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

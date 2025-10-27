@@ -1,28 +1,40 @@
-package com.red_badger.Martian.Robots.service;
+package com.red_badger.martian.robots.service;
 
-import com.red_badger.Martian.Robots.model.Grid;
-import com.red_badger.Martian.Robots.model.Orientation;
-import com.red_badger.Martian.Robots.model.Position;
-import com.red_badger.Martian.Robots.model.RobotInput;
+import com.red_badger.martian.robots.model.Grid;
+import com.red_badger.martian.robots.model.Orientation;
+import com.red_badger.martian.robots.model.Position;
+import com.red_badger.martian.robots.model.RobotInput;
+import com.red_badger.martian.robots.repository.RobotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 class RobotServiceTest {
 
+    @Mock
+    private RobotRepository robotRepository;
+
+    @InjectMocks
     private RobotService service;
+
     private Grid grid;
 
     @BeforeEach
     void setUp() {
-        service = new RobotService();
         grid = new Grid(5, 3);
     }
 
@@ -88,6 +100,20 @@ class RobotServiceTest {
                 () -> assertEquals(Orientation.N, secondResult.orientation()),
                 () -> assertFalse(secondResult.lost())
         );
+    }
+
+    @Test
+    void shouldSaveRobotToDatabase() {
+        var input = new RobotInput(5, 3, 1, 1, "E", "RFRFRFRF");
+
+        service.processMultipleRobots(input);
+
+        verify(robotRepository).save(argThat(robot ->
+                robot.getPosition().x() == 1 &&
+                        robot.getPosition().y() == 1 &&
+                        robot.getPosition().orientation() == Orientation.E &&
+                        !robot.getPosition().lost()
+        ));
     }
 
     @ParameterizedTest

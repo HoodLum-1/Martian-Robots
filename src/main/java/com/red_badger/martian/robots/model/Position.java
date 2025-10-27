@@ -1,4 +1,4 @@
-package com.red_badger.Martian.Robots.model;
+package com.red_badger.martian.robots.model;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;

@@ -1,0 +1,195 @@
+openapi: 3.0.3
+info:
+  title: Martian Robots API
+  description: |
+    Control robots on a Martian grid. Process movement instructions and get final positions.
+    Supports scent mechanics to prevent repeated loss at the same location.
+  version: 1.0.0
+  contact:
+    name: Red Badger
+    url: https://red-badger.com
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /:
+    get:
+      summary: Show web UI
+      operationId: showHomePage
+      responses:
+        '200':
+          description: HTML page with form
+          content:
+            text/html: {}
+
+  /process:
+    post:
+      summary: Process robot via HTML form
+      operationId: processForm
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RobotInput'
+      responses:
+        '200':
+          description: HTML page with results
+          content:
+            text/html: {}
+
+  /api/process:
+    get:
+      summary: Process robot instructions via REST API
+      operationId: processRobotApi
+      parameters:
+        - name: gridMaxX
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+          example: 5
+        - name: gridMaxY
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+          example: 3
+        - name: startX
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+          example: 1
+        - name: startY
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+          example: 1
+        - name: startOrientation
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: ^[NSEW]$
+          example: E
+        - name: instructions
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: ^[LRF]+$
+            maxLength: 100
+          example: RFRFRFRF
+      responses:
+        '200':
+          description: List of final robot positions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Position'
+              example:
+                - x: 1
+                  y: 1
+                  orientation: E
+                  lost: false
+        '400':
+          description: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    RobotInput:
+      type: object
+      required:
+        - gridMaxX
+        - gridMaxY
+        - startX
+        - startY
+        - startOrientation
+        - instructions
+      properties:
+        gridMaxX:
+          type: integer
+          minimum: 1
+          maximum: 50
+          example: 5
+        gridMaxY:
+          type: integer
+          minimum: 1
+          maximum: 50
+          example: 3
+        startX:
+          type: integer
+          minimum: 0
+          maximum: 50
+          example: 1
+        startY:
+          type: integer
+          minimum: 0
+          maximum: 50
+          example: 1
+        startOrientation:
+          type: string
+          pattern: ^[NSEW]$
+          example: E
+        instructions:
+          type: string
+          pattern: ^[LRF]+$
+          maxLength: 100
+          example: RFRFRFRF
+
+    Position:
+      type: object
+      properties:
+        x:
+          type: integer
+          example: 1
+        y:
+          type: integer
+          example: 1
+        orientation:
+          type: string
+          enum: [N, S, E, W]
+          example: E
+        lost:
+          type: boolean
+          example: false
+      example:
+        x: 1
+        y: 1
+        orientation: E
+        lost: false
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
